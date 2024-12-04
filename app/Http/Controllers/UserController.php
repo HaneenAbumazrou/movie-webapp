@@ -7,20 +7,42 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    // Get all users
     public function index()
     {
         $users = User::all();
-        return view('users.index', compact('users'));
+        return response()->json([
+            'message' => 'Users retrieved successfully.',
+            'data' => $users,
+        ], 200);
     }
 
-    public function show(User $user)
+    // Get a single user by ID
+    public function show($id)
     {
-        return view('users.show', compact('user'));
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found.'], 404);
+        }
+
+        return response()->json([
+            'message' => 'User retrieved successfully.',
+            'data' => $user,
+        ], 200);
     }
 
-    public function destroy(User $user)
+    // Delete a user by ID
+    public function destroy($id)
     {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found.'], 404);
+        }
+
         $user->delete();
-        return redirect()->route('users.index');
+
+        return response()->json(['message' => 'User deleted successfully.'], 200);
     }
 }
