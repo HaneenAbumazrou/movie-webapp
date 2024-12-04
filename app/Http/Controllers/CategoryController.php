@@ -7,45 +7,72 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    // Retrieve all categories
     public function index()
     {
         $categories = Category::all();
-        dd($categories);
-        return view('categories.index', compact('categories'));
+        return response()->json($categories, 200);
     }
 
-    public function create()
-    {
-        return view('categories.create');
-    }
-
+    // Store a new category
     public function store(Request $request)
     {
-        $request->validate(['name' => 'required|string|max:100']);
-        Category::create($request->all());
-        return redirect()->route('categories.index');
+        $validated = $request->validate([
+            'name' => 'required|string|max:100',
+        ]);
+
+        $category = Category::create($validated);
+
+        return response()->json([
+            'message' => 'Category created successfully.',
+            'data' => $category
+        ], 201);
     }
 
-    public function show(Category $category)
+    // Retrieve a single category by ID
+    public function show($id)
     {
-        return view('categories.show', compact('category'));
+        $category = Category::find($id);
+
+        if (!$category) {
+            return response()->json(['message' => 'Category not found.'], 404);
+        }
+
+        return response()->json($category, 200);
     }
 
-    public function edit(Category $category)
+    // Update a category by ID
+    public function update(Request $request, $id)
     {
-        return view('categories.edit', compact('category'));
+        $category = Category::find($id);
+
+        if (!$category) {
+            return response()->json(['message' => 'Category not found.'], 404);
+        }
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:100',
+        ]);
+
+        $category->update($validated);
+
+        return response()->json([
+            'message' => 'Category updated successfully.',
+            'data' => $category
+        ], 200);
     }
 
-    public function update(Request $request, Category $category)
+    // Delete a category by ID
+    public function destroy($id)
     {
-        $request->validate(['name' => 'required|string|max:100']);
-        $category->update($request->all());
-        return redirect()->route('categories.index');
-    }
+        $category = Category::find($id);
 
-    public function destroy(Category $category)
-    {
+        if (!$category) {
+            return response()->json(['message' => 'Category not found.'], 404);
+        }
+
         $category->delete();
-        return redirect()->route('categories.index');
+
+        return response()->json(['message' => 'Category deleted successfully.'], 200);
     }
 }

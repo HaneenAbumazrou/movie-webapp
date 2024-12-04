@@ -7,20 +7,36 @@ use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
+    // Retrieve all contacts
     public function index()
     {
         $contacts = Contact::all();
-        return view('contacts.index', compact('contacts'));
+        return response()->json($contacts, 200);
     }
 
-    public function show(Contact $contact)
+    // Retrieve a single contact by ID
+    public function show($id)
     {
-        return view('contacts.show', compact('contact'));
+        $contact = Contact::find($id);
+
+        if (!$contact) {
+            return response()->json(['message' => 'Contact not found.'], 404);
+        }
+
+        return response()->json($contact, 200);
     }
 
-    public function destroy(Contact $contact)
+    // Delete a contact by ID
+    public function destroy($id)
     {
+        $contact = Contact::find($id);
+
+        if (!$contact) {
+            return response()->json(['message' => 'Contact not found.'], 404);
+        }
+
         $contact->delete();
-        return redirect()->route('contacts.index');
+
+        return response()->json(['message' => 'Contact deleted successfully.'], 200);
     }
 }

@@ -8,21 +8,29 @@ use Illuminate\Http\Request;
 
 class MovieController extends Controller
 {
+    // Retrieve all movies
     public function index()
     {
         $movies = Movie::with('category')->get();
-        return view('movies.index', compact('movies'));
+        return response()->json($movies, 200);
     }
 
-    public function create()
+    // Retrieve a single movie by ID
+    public function show($id)
     {
-        $categories = Category::all();
-        return view('movies.create', compact('categories'));
+        $movie = Movie::with('category')->find($id);
+
+        if (!$movie) {
+            return response()->json(['message' => 'Movie not found.'], 404);
+        }
+
+        return response()->json($movie, 200);
     }
 
+    // Store a new movie
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
             'genre' => 'required|string|max:100',
@@ -31,24 +39,25 @@ class MovieController extends Controller
             'rating' => 'required|numeric|between:0,10',
             'poster_url' => 'required|string',
         ]);
-        Movie::create($request->all());
-        return redirect()->route('movies.index');
+
+        $movie = Movie::create($validated);
+
+        return response()->json([
+            'message' => 'Movie created successfully.',
+            'data' => $movie,
+        ], 201);
     }
 
-    public function show(Movie $movie)
+    // Update an existing movie
+    public function update(Request $request, $id)
     {
-        return view('movies.show', compact('movie'));
-    }
+        $movie = Movie::find($id);
 
-    public function edit(Movie $movie)
-    {
-        $categories = Category::all();
-        return view('movies.edit', compact('movie', 'categories'));
-    }
+        if (!$movie) {
+            return response()->json(['message' => 'Movie not found.'], 404);
+        }
 
-    public function update(Request $request, Movie $movie)
-    {
-        $request->validate([
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
             'genre' => 'required|string|max:100',
@@ -57,13 +66,26 @@ class MovieController extends Controller
             'rating' => 'required|numeric|between:0,10',
             'poster_url' => 'required|string',
         ]);
-        $movie->update($request->all());
-        return redirect()->route('movies.index');
+
+        $movie->update($validated);
+
+        return response()->json([
+            'message' => 'Movie updated successfully.',
+            'data' => $movie,
+        ], 200);
     }
 
-    public function destroy(Movie $movie)
+    // Delete a movie by ID
+    public function destroy($id)
     {
+        $movie = Movie::find($id);
+
+        if (!$movie) {
+            return response()->json(['message' => 'Movie not found.'], 404);
+        }
+
         $movie->delete();
-        return redirect()->route('movies.index');
+
+        return response()->json(['message' => 'Movie deleted successfully.'], 200);
     }
 }
