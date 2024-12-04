@@ -2,18 +2,51 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\MovieController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\UserController;
 
 /*
-|--------------------------------------------------------------------------
+|----------------------------------------------------------------------
 | API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
+|----------------------------------------------------------------------
 */
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// Categories Routes
+Route::get('categories', [CategoryController::class, 'index']);
+Route::post('categories', [CategoryController::class, 'store']);
+Route::get('categories/{category}', [CategoryController::class, 'show']);
+Route::put('categories/{category}', [CategoryController::class, 'update']);
+Route::delete('categories/{category}', [CategoryController::class, 'destroy']);
+
+// Contacts Routes
+Route::get('contacts', [ContactController::class, 'index']);
+Route::get('contacts/{contact}', [ContactController::class, 'show']);
+Route::delete('contacts/{contact}', [ContactController::class, 'destroy']);
+
+// Movies Routes
+Route::get('movies', [MovieController::class, 'index']);
+Route::post('movies', [MovieController::class, 'store']);
+Route::get('movies/{movie}', [MovieController::class, 'show']);
+Route::put('movies/{movie}', [MovieController::class, 'update']);
+Route::delete('movies/{movie}', [MovieController::class, 'destroy']);
+
+// Favorite Routes
+Route::post('favorites/{movieId}', [FavoriteController::class, 'store']);
+Route::delete('favorites/{movieId}', [FavoriteController::class, 'destroy']);
+
+// Reviews Routes
+Route::post('reviews/{movieId}', [ReviewController::class, 'store']);
+Route::delete('reviews/{movieId}/{reviewId}', [ReviewController::class, 'destroy']);
+
+// Users Routes
+Route::get('users', [UserController::class, 'index']);
+Route::get('users/{user}', [UserController::class, 'show']);
+Route::delete('users/{user}', [UserController::class, 'destroy']);
