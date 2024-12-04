@@ -48,7 +48,7 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         // Dispatch a job to delete the user if not verified within 30 seconds
-        DeleteUnverifiedUser::dispatch($user->id)->delay(now()->addSeconds(15));
+        DeleteUnverifiedUser::dispatch($user->id)->delay(now()->addMinutes(60));
 
         Auth::login($user);
 
