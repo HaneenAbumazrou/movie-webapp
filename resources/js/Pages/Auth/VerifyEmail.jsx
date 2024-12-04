@@ -1,16 +1,14 @@
 import React, { useState } from "react";
-import { SunMedium, Moon, Film, Mail, LogOut } from "lucide-react";
+import { SunMedium, Moon, Mail, Film } from "lucide-react";
+import { Head, Link, useForm } from "@inertiajs/react";
 
-const VerifyEmail = ({ status }) => {
+export default function VerifyEmail({ status }) {
     const [isDarkMode, setIsDarkMode] = useState(true);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const { post, processing } = useForm({});
 
-    const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
-
-    const handleSubmit = (e) => {
+    const submit = (e) => {
         e.preventDefault();
-        setIsSubmitting(true);
-        // Handle resend verification logic here
+        post(route("verification.send"));
     };
 
     return (
@@ -19,6 +17,8 @@ const VerifyEmail = ({ status }) => {
                 isDarkMode ? "bg-gray-900" : "bg-gray-50"
             }`}
         >
+            <Head title="Verify Email" />
+
             {/* Left Side */}
             <div className="hidden lg:flex lg:w-1/2 flex-col justify-center items-center p-12">
                 <div className="flex items-center mb-8 animate-fade-in">
@@ -40,12 +40,12 @@ const VerifyEmail = ({ status }) => {
                         isDarkMode ? "text-gray-300" : "text-gray-600"
                     }`}
                 >
-                    We're excited to have you join us! Let's make sure we have
-                    the right email address to keep you updated.
+                    Verify your email to unlock full access to your favorite
+                    movies and shows.
                 </p>
             </div>
 
-            {/* Right Side - Verification Content */}
+            {/* Right Side - Verify Email Form */}
             <div className="w-full lg:w-1/2 flex flex-col justify-center items-center p-8">
                 <div
                     className={`w-full max-w-md p-8 rounded-xl shadow-lg transition-colors duration-300 ${
@@ -54,7 +54,7 @@ const VerifyEmail = ({ status }) => {
                 >
                     {/* Dark Mode Toggle */}
                     <button
-                        onClick={toggleDarkMode}
+                        onClick={() => setIsDarkMode(!isDarkMode)}
                         className={`absolute top-4 right-4 p-2 rounded-full transition-colors ${
                             isDarkMode
                                 ? "bg-gray-700 text-yellow-300"
@@ -85,67 +85,63 @@ const VerifyEmail = ({ status }) => {
                     </div>
 
                     <h2
-                        className={`text-2xl font-bold mb-6 ${
+                        className={`text-2xl font-bold mb-4 ${
                             isDarkMode ? "text-white" : "text-gray-900"
                         }`}
                     >
                         Verify Your Email
                     </h2>
 
-                    <div
-                        className={`mb-6 ${
+                    <p
+                        className={`mb-6 text-sm ${
                             isDarkMode ? "text-gray-300" : "text-gray-600"
                         }`}
                     >
-                        Thanks for signing up! Before getting started, could you
-                        verify your email address by clicking on the link we
-                        just emailed to you? If you didn't receive the email, we
-                        will gladly send you another.
-                    </div>
+                        Thanks for signing up! Before getting started, verify
+                        your email address by clicking the link we emailed you.
+                        Didn't receive the email? We'll send another.
+                    </p>
 
                     {status === "verification-link-sent" && (
-                        <div className="mb-6 p-4 rounded-lg bg-green-100 text-green-700">
-                            A new verification link has been sent to the email
-                            address you provided during registration.
+                        <div className="mb-4 p-3 rounded bg-green-100 text-green-700 text-sm">
+                            A new verification link has been sent to your email
+                            address.
                         </div>
                     )}
 
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={submit} className="space-y-6">
                         <div className="flex items-center justify-between">
                             <button
                                 type="submit"
-                                disabled={isSubmitting}
-                                className={`flex items-center py-3 px-6 rounded-lg font-medium transition-all transform hover:scale-105 ${
+                                disabled={processing}
+                                className={`py-3 px-6 rounded-lg font-medium transition-all transform hover:scale-105 ${
                                     isDarkMode
                                         ? "bg-red-600 text-white hover:bg-red-700"
                                         : "bg-red-500 text-white hover:bg-red-600"
                                 } ${
-                                    isSubmitting &&
+                                    processing &&
                                     "opacity-50 cursor-not-allowed"
                                 }`}
                             >
-                                <Mail className="w-5 h-5 mr-2" />
                                 Resend Verification Email
                             </button>
 
-                            <button
-                                type="button"
-                                className={`flex items-center py-2 px-4 rounded-lg font-medium transition-colors ${
+                            <Link
+                                href={route("logout")}
+                                method="post"
+                                as="button"
+                                className={`text-sm font-medium hover:underline ${
                                     isDarkMode
-                                        ? "text-gray-300 hover:text-white hover:bg-gray-700"
-                                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                                        ? "text-red-400 hover:text-red-300"
+                                        : "text-red-600 hover:text-red-700"
                                 }`}
                             >
-                                <LogOut className="w-5 h-5 mr-2" />
                                 Log Out
-                            </button>
-
+                            </Link>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     );
-};
-
-export default VerifyEmail;
+}
