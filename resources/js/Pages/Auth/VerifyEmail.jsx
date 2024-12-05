@@ -97,13 +97,9 @@ export default function VerifyEmail({ status }) {
                         <AlertTriangle className="w-6 h-6 mr-3 flex-shrink-0" />
                         <div>
                             <p className="font-bold text-sm mb-1">
-                                Important: Account Deletion Warning
+                                Important: The verify email link will expire in 60 minutes.
                             </p>
-                            <p className="text-xs">
-                                Your account will be automatically deleted in{" "}
-                                <span className="font-bold">60 minutes</span> if
-                                you do not verify your email address.
-                            </p>
+
                         </div>
                     </div>
 
