@@ -1,26 +1,87 @@
 import React, { useState, useEffect } from "react";
 import { SunMedium, Moon, Mail, Lock, Film, Eye, EyeOff } from "lucide-react";
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm } from "@inertiajs/react";
 
 const LoginPage = () => {
     const [isDarkMode, setIsDarkMode] = useState(true);
     const [showPassword, setShowPassword] = useState(false);
 
-    const { data, setData, post, processing, errors, reset } = useForm({
-        email: '',
-        password: '',
+    // Validation Functions
+    const validateEmail = (email) => {
+        if (!email) return "Email is required";
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email))
+            return "Please enter a valid email address";
+        if (email.length > 100) return "Email cannot exceed 100 characters";
+        return null;
+    };
+
+    const validatePassword = (password) => {
+        if (!password) return "Password is required";
+        if (password.length < 8)
+            return "Password must be at least 8 characters long";
+        return null;
+    };
+
+    const {
+        data,
+        setData,
+        post,
+        processing,
+        errors,
+        reset,
+        setError,
+        clearErrors,
+    } = useForm({
+        email: "",
+        password: "",
         remember: true,
     });
 
     useEffect(() => {
         return () => {
-            reset('password');
+            reset("password");
         };
     }, []);
 
+    const validateForm = () => {
+        const newErrors = {};
+
+        // Email validation
+        const emailError = validateEmail(data.email);
+        if (emailError) newErrors.email = emailError;
+
+        // Password validation
+        const passwordError = validatePassword(data.password);
+        if (passwordError) newErrors.password = passwordError;
+
+        return newErrors;
+    };
+
     const submit = (e) => {
         e.preventDefault();
-        post(route('login'));
+
+        // Clear previous errors
+        clearErrors();
+
+        // Perform validation
+        const validationErrors = validateForm();
+
+        // If there are validation errors, set them and prevent submission
+        if (Object.keys(validationErrors).length > 0) {
+            Object.keys(validationErrors).forEach((key) => {
+                setError(key, validationErrors[key]);
+            });
+            return;
+        }
+
+        // If no errors, proceed with form submission
+        post(route("login"));
+    };
+
+    // Toggle Dark Mode
+    const toggleDarkMode = () => {
+        setIsDarkMode(!isDarkMode);
     };
 
     return (
@@ -65,8 +126,6 @@ const LoginPage = () => {
                         isDarkMode ? "bg-gray-800" : "bg-white"
                     }`}
                 >
-                    {/* Dark Mode Toggle */}
-                    
                     {/* Mobile Logo */}
                     <div className="lg:hidden flex items-center justify-center mb-8">
                         <Film
@@ -79,7 +138,7 @@ const LoginPage = () => {
                                 isDarkMode ? "text-white" : "text-gray-900"
                             }`}
                         >
-                        JO <span className="text-red-500">BEST</span>
+                            JO <span className="text-red-500">BEST</span>
                         </h1>
                     </div>
 
@@ -114,18 +173,22 @@ const LoginPage = () => {
                                     type="email"
                                     name="email"
                                     value={data.email}
-                                    onChange={(e) => setData('email', e.target.value)}
+                                    onChange={(e) =>
+                                        setData("email", e.target.value)
+                                    }
                                     className={`pl-10 w-full p-3 rounded-lg border transition-colors focus:ring-2 focus:ring-red-500 ${
                                         isDarkMode
                                             ? "bg-gray-700 border-gray-600 text-white"
                                             : "bg-white border-gray-300 text-gray-900"
-                                    }`}
+                                    } ${errors.email ? "border-red-500" : ""}`}
                                     placeholder="Enter your email"
                                     autoComplete="username"
                                 />
                             </div>
                             {errors.email && (
-                                <span className="text-red-500 text-sm mt-1">{errors.email}</span>
+                                <span className="text-red-500 text-sm mt-1">
+                                    {errors.email}
+                                </span>
                             )}
                         </div>
 
@@ -151,11 +214,15 @@ const LoginPage = () => {
                                     type={showPassword ? "text" : "password"}
                                     name="password"
                                     value={data.password}
-                                    onChange={(e) => setData('password', e.target.value)}
+                                    onChange={(e) =>
+                                        setData("password", e.target.value)
+                                    }
                                     className={`pl-10 w-full p-3 rounded-lg border transition-colors focus:ring-2 focus:ring-red-500 ${
                                         isDarkMode
                                             ? "bg-gray-700 border-gray-600 text-white"
                                             : "bg-white border-gray-300 text-gray-900"
+                                    } ${
+                                        errors.password ? "border-red-500" : ""
                                     }`}
                                     placeholder="Enter your password"
                                     autoComplete="current-password"
@@ -187,7 +254,9 @@ const LoginPage = () => {
                                 </button>
                             </div>
                             {errors.password && (
-                                <span className="text-red-500 text-sm mt-1">{errors.password}</span>
+                                <span className="text-red-500 text-sm mt-1">
+                                    {errors.password}
+                                </span>
                             )}
                         </div>
 
@@ -198,7 +267,7 @@ const LoginPage = () => {
                                     name="remember"
                                     checked={data.remember}
                                     onChange={(e) =>
-                                        setData('remember', e.target.checked)
+                                        setData("remember", e.target.checked)
                                     }
                                     className="rounded border-gray-300 text-red-600 focus:ring-red-500"
                                 />
@@ -213,7 +282,7 @@ const LoginPage = () => {
                                 </span>
                             </label>
                             <Link
-                                href={route('password.request')}
+                                href={route("password.request")}
                                 className={`text-sm font-medium hover:underline ${
                                     isDarkMode
                                         ? "text-red-400 hover:text-red-300"
@@ -231,7 +300,7 @@ const LoginPage = () => {
                                 isDarkMode
                                     ? "bg-red-600 text-white hover:bg-red-700"
                                     : "bg-red-500 text-white hover:bg-red-600"
-                            } ${processing && 'opacity-50 cursor-not-allowed'}`}
+                            } ${processing && "opacity-50 cursor-not-allowed"}`}
                         >
                             Sign In
                         </button>

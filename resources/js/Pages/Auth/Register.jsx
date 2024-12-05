@@ -7,7 +7,60 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const { data, setData, post, processing, errors, reset } = useForm({
+  // Validation Functions
+  const validateName = (name) => {
+    if (!name) return 'Name is required';
+    if (name.length < 2) return 'Name must be at least 2 characters long';
+    if (name.length > 50) return 'Name cannot exceed 50 characters';
+    if (!/^[a-zA-Z\s'-]+$/.test(name)) return 'Name can only contain letters, spaces, hyphens, and apostrophes';
+    return null;
+  };
+
+  const validateEmail = (email) => {
+    if (!email) return 'Email is required';
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) return 'Please enter a valid email address';
+    if (email.length > 100) return 'Email cannot exceed 100 characters';
+    return null;
+  };
+
+  const validatePassword = (password) => {
+    if (!password) return 'Password is required';
+
+    // Length check
+    if (password.length < 8) return 'Password must be at least 8 characters long';
+    if (password.length > 64) return 'Password cannot exceed 64 characters';
+
+    // Complexity checks
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumbers = /[0-9]/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    if (!hasUpperCase) return 'Password must contain at least one uppercase letter';
+    if (!hasLowerCase) return 'Password must contain at least one lowercase letter';
+    if (!hasNumbers) return 'Password must contain at least one number';
+    if (!hasSpecialChar) return 'Password must contain at least one special character';
+
+    // Common password checks
+    const commonPasswords = [
+      'password', '123456', 'qwerty', 'admin', 'letmein',
+      'welcome', 'monkey', 'password1', '12345678'
+    ];
+    if (commonPasswords.includes(password.toLowerCase())) {
+      return 'This password is too common. Please choose a stronger password.';
+    }
+
+    return null;
+  };
+
+  const validateConfirmPassword = (password, confirmPassword) => {
+    if (!confirmPassword) return 'Please confirm your password';
+    if (password !== confirmPassword) return 'Passwords do not match';
+    return null;
+  };
+
+  const { data, setData, post, processing, errors, reset, setError, clearErrors } = useForm({
     name: '',
     email: '',
     password: '',
@@ -20,21 +73,67 @@ export default function Register() {
     };
   }, []);
 
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Name validation
+    const nameError = validateName(data.name);
+    if (nameError) newErrors.name = nameError;
+
+    // Email validation
+    const emailError = validateEmail(data.email);
+    if (emailError) newErrors.email = emailError;
+
+    // Password validation
+    const passwordError = validatePassword(data.password);
+    if (passwordError) newErrors.password = passwordError;
+
+    // Confirm password validation
+    const confirmPasswordError = validateConfirmPassword(data.password, data.password_confirmation);
+    if (confirmPasswordError) newErrors.password_confirmation = confirmPasswordError;
+
+    return newErrors;
+  };
+
   const submit = (e) => {
     e.preventDefault();
+
+    // Clear previous errors
+    clearErrors();
+
+    // Perform validation
+    const validationErrors = validateForm();
+
+    // If there are validation errors, set them and prevent submission
+    if (Object.keys(validationErrors).length > 0) {
+      Object.keys(validationErrors).forEach(key => {
+        setError(key, validationErrors[key]);
+      });
+      return;
+    }
+
+    // If no errors, proceed with form submission
     post(route('register'));
+  };
+
+  // Toggle Dark Mode (optional)
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
   };
 
   return (
     <div className={`min-h-screen flex transition-colors duration-300 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
       <Head title="Register" />
 
+      {/* Dark Mode Toggle Button */}
+      
+
       {/* Left Side */}
       <div className="hidden lg:flex lg:w-1/2 flex-col justify-center items-center p-12">
         <div className="flex items-center mb-8 animate-fade-in">
           <Film className={`w-12 h-12 ${isDarkMode ? 'text-red-500' : 'text-red-600'}`} />
           <h1 className={`text-4xl font-bold ml-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-          JO <span className="text-red-500">BEST</span>
+            JO <span className="text-red-500">BEST</span>
           </h1>
         </div>
         <p className={`text-xl text-center max-w-md ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
@@ -47,13 +146,11 @@ export default function Register() {
         <div className={`w-full max-w-md p-8 rounded-xl shadow-lg transition-colors duration-300 ${
           isDarkMode ? 'bg-gray-800' : 'bg-white'
         }`}>
-         
-
           {/* Mobile Logo */}
           <div className="lg:hidden flex items-center justify-center mb-8">
             <Film className={`w-10 h-10 ${isDarkMode ? 'text-red-500' : 'text-red-600'}`} />
             <h1 className={`text-3xl font-bold ml-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-            JO <span className="text-red-500">BEST</span>
+              JO <span className="text-red-500">BEST</span>
             </h1>
           </div>
 
@@ -79,7 +176,7 @@ export default function Register() {
                     isDarkMode
                       ? 'bg-gray-700 border-gray-600 text-white'
                       : 'bg-white border-gray-300 text-gray-900'
-                  }`}
+                  } ${errors.name ? 'border-red-500' : ''}`}
                   placeholder="Enter your name"
                   required
                   autoComplete="name"
@@ -105,7 +202,7 @@ export default function Register() {
                     isDarkMode
                       ? 'bg-gray-700 border-gray-600 text-white'
                       : 'bg-white border-gray-300 text-gray-900'
-                  }`}
+                  } ${errors.email ? 'border-red-500' : ''}`}
                   placeholder="Enter your email"
                   required
                   autoComplete="username"
@@ -131,7 +228,7 @@ export default function Register() {
                     isDarkMode
                       ? 'bg-gray-700 border-gray-600 text-white'
                       : 'bg-white border-gray-300 text-gray-900'
-                  }`}
+                  } ${errors.password ? 'border-red-500' : ''}`}
                   placeholder="Create a password"
                   required
                   autoComplete="new-password"
@@ -168,7 +265,7 @@ export default function Register() {
                     isDarkMode
                       ? 'bg-gray-700 border-gray-600 text-white'
                       : 'bg-white border-gray-300 text-gray-900'
-                  }`}
+                  } ${errors.password_confirmation ? 'border-red-500' : ''}`}
                   placeholder="Confirm your password"
                   required
                   autoComplete="new-password"
