@@ -6,102 +6,122 @@ use App\Models\Review;
 use App\Models\User;
 use App\Models\Movie;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ReviewController extends Controller
 {
     // Retrieve all reviews
     public function index()
     {
-        $reviews = Review::with(['user', 'movie'])->get();
-        return response()->json($reviews, 200);
+        try {
+            $reviews = Review::with(['user', 'movie'])->get();
+            return response()->json($reviews, 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to retrieve reviews.', 'error' => $e->getMessage()], 500);
+        }
     }
 
     // Retrieve a single review by ID
     public function show($id)
     {
-        $review = Review::with(['user', 'movie'])->find($id);
-
-        if (!$review) {
+        try {
+            $review = Review::with(['user', 'movie'])->findOrFail($id);
+            return response()->json($review, 200);
+        } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Review not found.'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to retrieve the review.', 'error' => $e->getMessage()], 500);
         }
-
-        return response()->json($review, 200);
     }
 
     // Show the form for creating a new review
     public function create(Request $request)
     {
-        // Simulate creating a review (e.g., return a view for form in Blade)
-        return response()->json(['message' => 'Display the create review form.'], 200);
+        try {
+            return response()->json(['message' => 'Display the create review form.'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to display the create review form.', 'error' => $e->getMessage()], 500);
+        }
     }
 
     // Store a new review
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'movie_id' => 'required|exists:movies,id',
-            'rating' => 'required|numeric|min:1|max:5',
-            'review' => 'nullable|string',
-        ]);
+        try {
+            $validated = $request->validate([
+                'user_id' => 'required|exists:users,id',
+                'movie_id' => 'required|exists:movies,id',
+                'rating' => 'required|numeric|min:1|max:5',
+                'review' => 'nullable|string',
+            ]);
 
-        $review = Review::create($validated);
+            $review = Review::create($validated);
 
-        return response()->json([
-            'message' => 'Review created successfully.',
-            'data' => $review,
-        ], 201);
+            return response()->json([
+                'message' => 'Review created successfully.',
+                'data' => $review,
+            ], 201);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['message' => 'Validation failed.', 'errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to create the review.', 'error' => $e->getMessage()], 500);
+        }
     }
 
     // Show the form for editing an existing review
     public function edit($id)
     {
-        $review = Review::find($id);
-
-        if (!$review) {
+        try {
+            $review = Review::findOrFail($id);
+            return response()->json([
+                'message' => 'Display the edit review form.',
+                'data' => $review,
+            ], 200);
+        } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Review not found.'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to display the edit review form.', 'error' => $e->getMessage()], 500);
         }
-
-        // Simulate editing a review (e.g., return a view for form in Blade)
-        return response()->json([
-            'message' => 'Display the edit review form.',
-            'data' => $review,
-        ], 200);
     }
 
     // Update an existing review
     public function update(Request $request, $id)
     {
-        $review = Review::find($id);
+        try {
+            $review = Review::findOrFail($id);
 
-        if (!$review) {
+            $validated = $request->validate([
+                'rating' => 'required|numeric|min:1|max:5',
+                'review' => 'nullable|string',
+            ]);
+
+            $review->update($validated);
+
+            return response()->json([
+                'message' => 'Review updated successfully.',
+                'data' => $review,
+            ], 200);
+        } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Review not found.'], 404);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['message' => 'Validation failed.', 'errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to update the review.', 'error' => $e->getMessage()], 500);
         }
-
-        $validated = $request->validate([
-            'rating' => 'required|numeric|min:1|max:5',
-            'review' => 'nullable|string',
-        ]);
-
-        $review->update($validated);
-
-        return response()->json([
-            'message' => 'Review updated successfully.',
-            'data' => $review,
-        ], 200);
     }
 
     // Delete a review by ID
     public function destroy($id)
     {
-        $review = Review::find($id);
+        try {
+            $review = Review::findOrFail($id);
+            $review->delete();
 
-        if (!$review) {
+            return response()->json(['message' => 'Review deleted successfully.'], 200);
+        } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Review not found.'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to delete the review.', 'error' => $e->getMessage()], 500);
         }
-
-        $review->delete();
-
-        return response()->json(['message' => 'Review deleted successfully.'], 200);
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\MovieController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\ChatBotController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,11 @@ use Inertia\Inertia;
 */
 Route::get('movies/chatgpt-recommendations', [MovieController::class, 'chatGptRecommendations']);
 
+Route::get('/chatbot', [ChatBotController::class, 'index']); // Renders the chatbot page
+Route::post('/chatbot', [ChatBotController::class, 'chatbot']); // Handles chat messages
+
+
+
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -29,9 +35,9 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/home', function () {
+    return Inertia::render('Home');
+})->middleware(['auth', 'verified'])->name('home');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

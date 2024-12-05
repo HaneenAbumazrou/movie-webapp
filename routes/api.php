@@ -8,6 +8,10 @@ use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ChatBotController;
+
+
+Route::post('/chatbot', [ChatBotController::class, 'chatbot']); // Updated to 'chatbot'
 
 /*
 |----------------------------------------------------------------------
