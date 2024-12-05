@@ -15,6 +15,9 @@ use App\Http\Controllers\UserController;
 |----------------------------------------------------------------------
 */
 
+Route::get('movies/chatgpt-recommendations/{userId}', [MovieController::class, 'chatGptRecommendations']);
+
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
