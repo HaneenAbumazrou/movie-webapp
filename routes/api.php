@@ -51,4 +51,4 @@ Route::get('users', [UserController::class, 'index']);
 Route::get('users/{user}', [UserController::class, 'show']);
 Route::delete('users/{user}', [UserController::class, 'destroy']);
 
-Route::get('/movies/search/{movie}', [MovieController::class, 'search']);
+Route::get('/movies/search', [MovieController::class, 'search']);
