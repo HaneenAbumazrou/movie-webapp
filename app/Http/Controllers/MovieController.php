@@ -5,11 +5,66 @@ namespace App\Http\Controllers;
 use App\Models\Movie;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Services\ChatGPTService;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
 use Illuminate\Validation\ValidationException;
 
 class MovieController extends Controller
 {
+
+    public function chatGptRecommendations($userId)
+    {
+        // Check if the user exists
+        $userExists = DB::table('users')->where('id', $userId)->exists();
+        if (!$userExists) {
+            return response()->json(['error' => 'User not found.'], 404);
+        }
+
+        // Fetch genres from watched_movies
+        $watchedGenres = DB::table('watched_movies')
+        ->join('movies', 'watched_movies.movie_id', '=', 'movies.id')
+        ->where('watched_movies.user_id', $userId)
+            ->select('movies.genre', DB::raw('COUNT(movies.genre) as count'))
+            ->groupBy('movies.genre')
+            ->orderByDesc('count')
+            ->pluck('count', 'genre')
+            ->toArray();
+
+        // Fetch genres from favorites
+        $favoriteGenres = DB::table('favorites')
+        ->join('movies', 'favorites.movie_id', '=', 'movies.id')
+        ->where('favorites.user_id', $userId)
+            ->select('movies.genre', DB::raw('COUNT(movies.genre) as count'))
+            ->groupBy('movies.genre')
+            ->orderByDesc('count')
+            ->pluck('count', 'genre')
+            ->toArray();
+
+        // Merge and weight genres from both sources
+        $mergedGenres = [];
+        foreach ($watchedGenres as $genre => $count) {
+            $mergedGenres[$genre] = ($mergedGenres[$genre] ?? 0) + $count * 2; // Higher weight for watched
+        }
+        foreach ($favoriteGenres as $genre => $count) {
+            $mergedGenres[$genre] = ($mergedGenres[$genre] ?? 0) + $count;
+        }
+
+        // Sort genres by relevance
+        arsort($mergedGenres);
+        $preferredGenres = implode(', ', array_keys($mergedGenres));
+
+        // Fetch recommendations using ChatGPT
+        $chatGPTService = new ChatGPTService();
+        $recommendations = $chatGPTService->getRecommendations($preferredGenres);
+
+        return response()->json([
+            'user_preferences' => $mergedGenres,
+            'recommendations' => $recommendations,
+        ]);
+    }
+
     // Retrieve all movies
     public function index()
     {

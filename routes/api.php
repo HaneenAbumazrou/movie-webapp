@@ -19,6 +19,9 @@ Route::post('/chatbot', [ChatBotController::class, 'chatbot']); // Updated to 'c
 |----------------------------------------------------------------------
 */
 
+Route::get('movies/chatgpt-recommendations/{userId}', [MovieController::class, 'chatGptRecommendations']);
+
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
