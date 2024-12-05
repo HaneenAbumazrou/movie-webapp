@@ -43,8 +43,12 @@ Route::post('favorites/{movieId}', [FavoriteController::class, 'store']);
 Route::delete('favorites/{movieId}', [FavoriteController::class, 'destroy']);
 
 // Reviews Routes
+Route::get('reviews', [ReviewController::class, 'index']);
 Route::post('reviews/{movieId}', [ReviewController::class, 'store']);
 Route::delete('reviews/{movieId}/{reviewId}', [ReviewController::class, 'destroy']);
+Route::get('reviews/create', [ReviewController::class, 'create']);
+Route::get('reviews/{reviewId}/edit', [ReviewController::class, 'edit']);
+
 
 // Users Routes
 Route::get('users', [UserController::class, 'index']);
