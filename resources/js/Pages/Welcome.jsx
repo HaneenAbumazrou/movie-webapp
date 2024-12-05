@@ -1,120 +1,68 @@
-import React, { useState } from "react";
-import { Film, Star, Calendar, Search, User, LogIn } from "lucide-react";
+import React from "react";
+import { Clapperboard, Play } from "lucide-react";
+import { Link } from "@inertiajs/react";
 
-const HomePage = () => {
-    const [searchQuery, setSearchQuery] = useState("");
+const WelcomePage = () => {
+    const movieBackground = "/images/background.jpg";
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
-            {/* Header */}
-            <header className="flex justify-between items-center p-6 border-b border-gray-700">
-                <div className="flex items-center space-x-3">
-                    <Film size={40} className="text-red-500" />
-                    <h1 className="text-3xl font-bold text-white">JO BEST</h1>
-                </div>
+        <div className="min-h-screen bg-black text-white relative overflow-hidden">
+            {/* Background with Opacity */}
+            <div
+                className="absolute inset-0 bg-cover bg-center opacity-40 z-0"
+                style={{
+                    backgroundImage: `url(${movieBackground})`,
+                }}
+            ></div>
 
-                <nav className="flex space-x-6">
-                    <a
-                        href="#"
-                        className="hover:text-red-500 flex items-center"
+            {/* Dark Overlay */}
+            <div className="absolute inset-0 bg-black opacity-50 z-0"></div>
+
+            {/* Content */}
+            <div className="relative z-10">
+                {/* Navbar */}
+                <nav className="flex justify-between items-center p-6">
+                    <div className="flex items-center">
+                        <Clapperboard className="w-10 h-10 text-red-500 mr-3" />
+                        <h1 className="text-3xl font-bold">
+                            JO <span className="text-red-500">BEST</span>
+                        </h1>
+                    </div>
+                    <Link
+                        href={route("login")}
+                        className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-full transition-colors flex items-center"
                     >
-                        <Star className="mr-2" size={20} /> Movies
-                    </a>
-                    <a
-                        href="#"
-                        className="hover:text-red-500 flex items-center"
-                    >
-                        <Calendar className="mr-2" size={20} /> Showtimes
-                    </a>
+                        Login <Play className="ml-2 w-5 h-5" />
+                    </Link>
                 </nav>
 
-                <div className="flex items-center space-x-4">
-                    <div className="relative">
-                        <input
-                            type="text"
-                            placeholder="Search movies..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="bg-gray-700 text-white px-4 py-2 rounded-full pr-10 focus:outline-none focus:ring-2 focus:ring-red-500"
-                        />
-                        <Search
-                            className="absolute right-3 top-3 text-gray-400"
-                            size={20}
-                        />
-                    </div>
-
-                    <div className="flex space-x-2">
-                        <a href={route("login")}>LOGIN</a>
-
-                        <a href={route("register")}>Register</a>
-
-                    </div>
-                </div>
-            </header>
-
-            {/* Hero Section */}
-            <main className="container mx-auto px-6 py-16">
-                <div className="text-center">
-                    <h2 className="text-5xl font-bold mb-6">
-                        Discover Your Next Favorite Movie
-                    </h2>
-                    <p className="text-xl text-gray-300 mb-10">
-                        Stream, watch, and explore the latest blockbusters and
-                        hidden gems
-                    </p>
-                </div>
-
-                {/* Featured Movies Grid */}
-                <div className="grid grid-cols-4 gap-6 mt-12">
-                    {[1, 2, 3, 4].map((movie) => (
-                        <div
-                            key={movie}
-                            className="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform"
-                        >
-                            <img
-                                src={`/api/placeholder/300/450?text=Movie+${movie}`}
-                                alt={`Movie ${movie}`}
-                                className="w-full h-[450px] object-cover"
-                            />
-                            <div className="p-4">
-                                <h3 className="text-xl font-semibold">
-                                    Movie Title {movie}
-                                </h3>
-                                <div className="flex items-center mt-2">
-                                    <Star
-                                        className="text-yellow-500 mr-2"
-                                        size={20}
-                                    />
-                                    <span>8.{movie}/10</span>
-                                </div>
-                            </div>
+                {/* Hero Content */}
+                <div className="container mx-auto px-6 py-16 flex items-center justify-center min-h-[calc(100vh-100px)]">
+                    <div className="text-center max-w-3xl">
+                        <h1 className="text-6xl font-black mb-6 leading-tight">
+                            Welcome to{" "}
+                            <span className="text-red-500">JO BEST</span>
+                        </h1>
+                        <p className="text-xl mb-8 leading-relaxed">
+                            Dive into a world of unlimited entertainment. JO
+                            BEST brings you the latest blockbusters, timeless
+                            classics, and exclusive originals right at your
+                            fingertips. Stream anytime, anywhere, and transform
+                            your movie-watching experience.
+                        </p>
+                        <div className="flex justify-center space-x-4">
+                            <Link
+                                href={route("register")}
+                                className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-full transition-colors flex items-center"
+                            >
+                                Get Started <Play className="ml-2" />
+                            </Link>
                         </div>
-                    ))}
-                </div>
-            </main>
-
-            {/* Footer */}
-            <footer className="bg-gray-800 text-white py-8 mt-16">
-                <div className="container mx-auto flex justify-between items-center">
-                    <div className="flex items-center space-x-3">
-                        <Film size={30} className="text-red-500" />
-                        <span className="text-2xl font-bold">JO BEST</span>
-                    </div>
-                    <div className="space-x-6">
-                        <a href="#" className="hover:text-red-500">
-                            About
-                        </a>
-                        <a href="#" className="hover:text-red-500">
-                            Contact
-                        </a>
-                        <a href="#" className="hover:text-red-500">
-                            Privacy Policy
-                        </a>
                     </div>
                 </div>
-            </footer>
+            </div>
         </div>
     );
 };
 
-export default HomePage;
+export default WelcomePage;
