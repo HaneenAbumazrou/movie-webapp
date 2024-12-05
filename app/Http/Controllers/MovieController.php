@@ -88,4 +88,43 @@ class MovieController extends Controller
 
         return response()->json(['message' => 'Movie deleted successfully.'], 200);
     }
+
+    // Add this method to your MovieController
+     public function search(Request $request)
+     
+    {
+    $query = Movie::with('category');
+
+    // Search by title (case-insensitive)
+    if ($request->has('title')) {
+        $query->where('title', 'LIKE', '%' . $request->input('title') . '%');
+    }
+
+    // Filter by genre
+    if ($request->has('genre')) {
+        $query->where('genre', $request->input('genre'));
+    }
+
+    // Filter by category
+    if ($request->has('category_id')) {
+        $query->where('category_id', $request->input('category_id'));
+    }
+
+    // Filter by minimum rating
+    if ($request->has('min_rating')) {
+        $query->where('rating', '>=', $request->input('min_rating'));
+    }
+
+    // Filter by release date range
+    if ($request->has('start_date') && $request->has('end_date')) {
+        $query->whereBetween('release_date', [
+            $request->input('start_date'), 
+            $request->input('end_date')
+        ]);
+    }
+
+    // Paginate results
+    $movies = $query->paginate(10);
+    return $movies;
+}
 }
