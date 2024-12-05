@@ -13,8 +13,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Support\Facades\DB;
-use App\Jobs\DeleteUnverifiedUser;
 
 class RegisteredUserController extends Controller
 {
@@ -35,7 +33,7 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:users,email',
+            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -46,9 +44,6 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($user));
-
-        // Dispatch a job to delete the user if not verified within 30 seconds
-        DeleteUnverifiedUser::dispatch($user->id)->delay(now()->addMinutes(60));
 
         Auth::login($user);
 

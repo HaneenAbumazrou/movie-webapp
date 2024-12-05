@@ -101,7 +101,7 @@ export default function VerifyEmail({ status }) {
                             </p>
                             <p className="text-xs">
                                 Your account will be automatically deleted in{" "}
-                                <span className="font-bold">6 minutes</span> if
+                                <span className="font-bold">60 minutes</span> if
                                 you do not verify your email address.
                             </p>
                         </div>
