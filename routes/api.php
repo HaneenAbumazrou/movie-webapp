@@ -34,7 +34,7 @@ Route::delete('contacts/{contact}', [ContactController::class, 'destroy']);
 // Movies Routes
 Route::get('movies', [MovieController::class, 'index']);
 Route::post('movies', [MovieController::class, 'store']);
-Route::get('movies/{movie}', [MovieController::class, 'show']);
+Route::get('movie', [MovieController::class, 'show']);
 Route::put('movies/{movie}', [MovieController::class, 'update']);
 Route::delete('movies/{movie}', [MovieController::class, 'destroy']);
 
