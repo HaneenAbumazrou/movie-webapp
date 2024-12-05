@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { SunMedium, Moon, Mail, Film } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { SunMedium, Moon, Mail, Film, AlertTriangle } from "lucide-react";
 import { Head, Link, useForm } from "@inertiajs/react";
 
 export default function VerifyEmail({ status }) {
@@ -52,22 +52,6 @@ export default function VerifyEmail({ status }) {
                         isDarkMode ? "bg-gray-800" : "bg-white"
                     }`}
                 >
-                    {/* Dark Mode Toggle */}
-                    <button
-                        onClick={() => setIsDarkMode(!isDarkMode)}
-                        className={`absolute top-4 right-4 p-2 rounded-full transition-colors ${
-                            isDarkMode
-                                ? "bg-gray-700 text-yellow-300"
-                                : "bg-gray-200 text-gray-600"
-                        }`}
-                    >
-                        {isDarkMode ? (
-                            <SunMedium className="w-5 h-5" />
-                        ) : (
-                            <Moon className="w-5 h-5" />
-                        )}
-                    </button>
-
                     {/* Mobile Logo */}
                     <div className="lg:hidden flex items-center justify-center mb-8">
                         <Film
@@ -101,6 +85,27 @@ export default function VerifyEmail({ status }) {
                         your email address by clicking the link we emailed you.
                         Didn't receive the email? We'll send another.
                     </p>
+
+                    {/* Important Account Deletion Warning */}
+                    <div
+                        className={`flex items-center p-4 mb-6 rounded-lg border-l-4 ${
+                            isDarkMode
+                                ? "bg-red-900/20 border-red-500 text-red-300"
+                                : "bg-red-100 border-red-600 text-red-700"
+                        }`}
+                    >
+                        <AlertTriangle className="w-6 h-6 mr-3 flex-shrink-0" />
+                        <div>
+                            <p className="font-bold text-sm mb-1">
+                                Important: Account Deletion Warning
+                            </p>
+                            <p className="text-xs">
+                                Your account will be automatically deleted in{" "}
+                                <span className="font-bold">6 minutes</span> if
+                                you do not verify your email address.
+                            </p>
+                        </div>
+                    </div>
 
                     {status === "verification-link-sent" && (
                         <div className="mb-4 p-3 rounded bg-green-100 text-green-700 text-sm">

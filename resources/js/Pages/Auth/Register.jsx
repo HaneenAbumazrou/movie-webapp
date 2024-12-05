@@ -47,15 +47,7 @@ export default function Register() {
         <div className={`w-full max-w-md p-8 rounded-xl shadow-lg transition-colors duration-300 ${
           isDarkMode ? 'bg-gray-800' : 'bg-white'
         }`}>
-          {/* Dark Mode Toggle */}
-          <button
-            onClick={() => setIsDarkMode(!isDarkMode)}
-            className={`absolute top-4 right-4 p-2 rounded-full transition-colors ${
-              isDarkMode ? 'bg-gray-700 text-yellow-300' : 'bg-gray-200 text-gray-600'
-            }`}
-          >
-            {isDarkMode ? <SunMedium className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-          </button>
+         
 
           {/* Mobile Logo */}
           <div className="lg:hidden flex items-center justify-center mb-8">
