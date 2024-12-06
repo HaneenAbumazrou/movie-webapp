@@ -34,6 +34,9 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+Route::get('/about-us', function () {
+    return Inertia::render('about-us');
+})->name('about-us');
 
 Route::get('/home', function () {
     return Inertia::render('Home');
