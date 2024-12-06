@@ -1,7 +1,6 @@
 # 🎬 Movie Hub
 
-![Movie Hub Screenshot](https://png.pngtree.com/png-clipart/20220531/original/pngtree-cinema-banner-with-of-movie-elements-poster-png-image_7782619.png)
-## 📽️ Project Overview
+![Movie Hub Screenshot](/public/github-images/welcome.png)## 📽️ Project Overview
 
 Movie Hub is a cutting-edge web application designed for movie enthusiasts, built with Laravel and modern web technologies. Discover, track, and manage your favorite films with an intuitive and responsive platform.
 
