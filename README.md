@@ -16,13 +16,14 @@ Movie Hub is a cutting-edge web application designed for movie enthusiasts, buil
 - **Intuitive Movie Discovery**: Browse movies with advanced filtering and search capabilities
 
 ### 🔍 Technical Highlights
-- **Modern Tech Stack**: Laravel, Tailwind CSS, Alpine.js
+- **Modern Tech Stack**: Laravel, React, Tailwind CSS, Alpine.js
 - **Responsive Design**: Mobile-first approach with fluid user interface
 - **Robust Backend**: Eloquent ORM and MVC architecture
 
 ## 🛠️ Technologies Used
 
 ![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
+![React]([https://img.shields.io/badge/react-6fa8dc?style=for-the-badge&logo=react&logoColor=white])
 ![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white)
@@ -100,7 +101,12 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## 📞 Contact
 
-Your Name - [Your Email]
+[Hamza Al-Tal]
+[Mohammad Al-Ashhab]
+[Salem Qandil]
+[Reem Switi]
+[Haneen Abu-Mazrou]
+
 
 Project Link: [https://github.com/yourusername/movie-hub](https://github.com/yourusername/movie-hub)
 
