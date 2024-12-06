@@ -10,6 +10,10 @@ const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
 axios.defaults.baseURL = "http://127.0.0.1:8000/api"; // Adjust the URL for your Laravel backend
 
+
+
+
+
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) =>
