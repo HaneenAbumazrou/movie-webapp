@@ -1,7 +1,6 @@
 # 🎬 Movie Hub
 
-![Project Banner]([https://www.vecteezy.com/free-vector/movie-banner])
-
+![Movie Hub Screenshot](https://www.vecteezy.com/free-vector/movie-banner)
 ## 📽️ Project Overview
 
 Movie Hub is a cutting-edge web application designed for movie enthusiasts, built with Laravel and modern web technologies. Discover, track, and manage your favorite films with an intuitive and responsive platform.
