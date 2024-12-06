@@ -1,6 +1,6 @@
 # 🎬 Movie Hub
 
-![Project Banner](https://www.vecteezy.com/free-vector/movie-banner)
+![Project Banner]([https://www.vecteezy.com/free-vector/movie-banner])
 
 ## 📽️ Project Overview
 
