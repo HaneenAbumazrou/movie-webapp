@@ -4,7 +4,10 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title inertia>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ $title ?? 'JO BEST' }}</title>
+
+        <!-- icon -->
+        <link rel="icon" type="image/x-icon" href="{{ asset('/images/clapperboard.png') }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">

@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
+import { Link } from "@inertiajs/react";
+
 import {
     Send,
     MessageCircle,
@@ -52,7 +54,8 @@ const MovieHomepage = () => {
         },
     ];
 
-    // Chat functionality remains the same as previous code
+
+
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
@@ -102,6 +105,17 @@ const MovieHomepage = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
+           {/* Navigation Bar with Logout */}
+<div className="absolute top-0 right-0 p-6 z-50">
+    <Link
+        href={route("logout")}
+        method="post"
+        as="button"
+        className="text-sm font-medium text-red-600 hover:text-red-700 hover:underline"
+    >
+        Log Out
+    </Link>
+</div>
             {/* Hero Section */}
             <div className="relative overflow-hidden">
                 <div className="container mx-auto px-4 py-16">
