@@ -37,19 +37,19 @@ const AboutUsPage = () => {
                 </nav>
 
                 {/* About Us Content */}
-                <div className="container mx-auto px-6 py-16 flex items-center justify-center min-h-[calc(100vh-150px)]">
+                <div className="container mx-auto px-6 py-6 flex items-center justify-center min-h-[calc(100vh-150px)]">
                     <div className="text-center max-w-4xl">
                         <h1 className="text-6xl font-extrabold mb-6 leading-tight">
                             About <span className="text-red-500">JO BEST</span>
                         </h1>
                         <p className="text-xl mb-8 leading-relaxed">
-                            At JO BEST, we believe movies are more than just entertainment—they’re an experience. 
-                            Our mission is to bring cinematic magic to everyone, everywhere, by offering a curated 
-                            collection of blockbuster hits, hidden gems, and exclusive originals. 
+                            At JO BEST, we believe movies are more than just entertainment—they’re an experience.
+                            Our mission is to bring cinematic magic to everyone, everywhere, by offering a curated
+                            collection of blockbuster hits, hidden gems, and exclusive originals.
                         </p>
                         <p className="text-xl mb-8 leading-relaxed">
-                            Founded with a passion for storytelling, JO BEST is committed to delivering high-quality 
-                            streaming services and fostering a community of movie lovers. We aim to redefine how you experience entertainment, 
+                            Founded with a passion for storytelling, JO BEST is committed to delivering high-quality
+                            streaming services and fostering a community of movie lovers. We aim to redefine how you experience entertainment,
                             whether you’re a casual viewer or a cinema aficionado.
                         </p>
                         <p className="text-xl mb-8 leading-relaxed">
