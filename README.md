@@ -1,6 +1,6 @@
 # 🎬 Movie Hub
 
-![Project Banner](https://via.placeholder.com/1200x400.png?text=Movie+Hub+Project+Banner)
+![Project Banner]([https://via.placeholder.com/1200x400.png?text=Movie+Hub+Project+Banner](https://www.vecteezy.com/free-vector/movie-banner))
 
 ## 📽️ Project Overview
 
