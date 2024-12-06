@@ -29,7 +29,7 @@ const AboutUsPage = () => {
                         </h1>
                     </div>
                     <Link
-                        // href={route("home")}
+                        href={route("welcome")}
                         className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-full transition-transform transform hover:scale-105 flex items-center"
                     >
                         Home <Info className="ml-2 w-5 h-5" />
@@ -57,13 +57,13 @@ const AboutUsPage = () => {
                         </p>
                         <div className="flex justify-center space-x-4">
                             <Link
-                                // href={route("contact")}
+                                href={route("welcome")}
                                 className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-full transition-transform transform hover:scale-105 flex items-center"
                             >
                                 Contact Us <Info className="ml-2" />
                             </Link>
                             <Link
-                                // href={route("movies")}
+                                href={route("welcome")}
                                 className="bg-gray-700 hover:bg-gray-800 text-white px-8 py-3 rounded-full transition-transform transform hover:scale-105 flex items-center"
                             >
                                 Explore Movies <Clapperboard className="ml-2" />
