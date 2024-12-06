@@ -12,9 +12,9 @@ function App() {
     <BrowserRouter>
     <div>
       <Navbar></Navbar>
-        <Home>
-      
-        </Home>
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
     </div>
     </BrowserRouter>
   );
