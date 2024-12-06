@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
-import { Link } from '@inertiajs/react';
+import { Link } from "@inertiajs/react";
 
 import {
     Send,
@@ -15,7 +15,6 @@ import {
     Award,
     PlayCircle,
     Heart,
-    LogOut,
 } from "lucide-react";
 
 const MovieHomepage = () => {
@@ -55,16 +54,7 @@ const MovieHomepage = () => {
         },
     ];
 
-    const handleLogout = async () => {
-        try {
-            // Send a POST request to the logout route
-            await axios.post('/logout'); // Make sure your logout route is defined in your Laravel routes
-            // Redirect to login page after logout
-            window.location.href = '/login';
-        } catch (error) {
-            console.error("Logout failed:", error);
-        }
-    };
+
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -115,17 +105,17 @@ const MovieHomepage = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
-            {/* Navigation Bar with Logout */}
-            <div className="absolute top-0 right-0 p-6 z-50">
-                <button
-                    onClick={handleLogout}
-                    className="flex items-center space-x-2 bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-lg transition-all duration-300 border border-gray-700 hover:border-red-500"
-                >
-                    <LogOut className="w-5 h-5 text-red-500" />
-                    <span>Logout</span>
-                </button>
-            </div>
-
+           {/* Navigation Bar with Logout */}
+<div className="absolute top-0 right-0 p-6 z-50">
+    <Link
+        href={route("logout")}
+        method="post"
+        as="button"
+        className="text-sm font-medium text-red-600 hover:text-red-700 hover:underline"
+    >
+        Log Out
+    </Link>
+</div>
             {/* Hero Section */}
             <div className="relative overflow-hidden">
                 <div className="container mx-auto px-4 py-16">
