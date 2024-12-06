@@ -199,7 +199,7 @@ class MovieController extends Controller
             // Filter by release date range
             if ($request->has('start_date') && $request->has('end_date')) {
                 $query->whereBetween('release_date', [
-                    $request->input('start_date'), 
+                    $request->input('start_date'),
                     $request->input('end_date')
                 ]);
             }
