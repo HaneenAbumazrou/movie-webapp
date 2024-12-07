@@ -249,4 +249,16 @@ class MovieController extends Controller
             return response()->json(['message' => 'Failed to fetch movies.', 'error' => $e->getMessage()], 500);
         }
     }
+
+    public function random()
+    {
+        // Fetch a random movie
+        $movie = Movie::inRandomOrder()->first(); // `inRandomOrder` fetches a random record
+
+        if (!$movie) {
+            return response()->json(['error' => 'No movies found'], 404);
+        }
+
+        return response()->json($movie);
+    }
 }

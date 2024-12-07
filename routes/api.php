@@ -48,8 +48,11 @@ Route::get('movies/genre/{genre}', [MovieController::class, 'byGenre']);
 Route::get('movies/search/{query}', [MovieController::class, 'search']);
 Route::put('movies/{movie}', [MovieController::class, 'update']);
 Route::delete('movies/{movie}', [MovieController::class, 'destroy']);
+// New route for fetching a random movie
+Route::get('movies/random', [MovieController::class, 'random']);
 
 // Favorite Routes
+Route::get('favorites', [FavoriteController::class, 'index']);
 Route::post('favorites/{movieId}', [FavoriteController::class, 'store']);
 Route::delete('favorites/{movieId}', [FavoriteController::class, 'destroy']);
 
