@@ -14,6 +14,44 @@ use Illuminate\Validation\ValidationException;
 class MovieController extends Controller
 {
 
+    public function featured()
+    {
+        try {
+            $featuredMovies = Movie::where('is_featured', true)
+                ->orderBy('rating', 'desc')
+                ->take(5)
+                ->get();
+
+            return response()->json($featuredMovies, 200);
+        } catch (QueryException $e) {
+            return response()->json(['message' => 'Failed to fetch featured movies.', 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function trending()
+    {
+        try {
+            $trendingMovies = Movie::orderBy('popularity', 'desc')
+                ->take(10)
+                ->get();
+
+            return response()->json($trendingMovies, 200);
+        } catch (QueryException $e) {
+            return response()->json(['message' => 'Failed to fetch trending movies.', 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function byGenre($genre)
+    {
+        try {
+            $movies = Movie::where('genre', $genre)->take(10)->get();
+            return response()->json($movies, 200);
+        } catch (QueryException $e) {
+            return response()->json(['message' => 'Failed to fetch movies by genre.', 'error' => $e->getMessage()], 500);
+        }
+    }
+
+
     public function chatGptRecommendations($userId)
     {
         // Check if the user exists
@@ -24,8 +62,8 @@ class MovieController extends Controller
 
         // Fetch genres from watched_movies
         $watchedGenres = DB::table('watched_movies')
-        ->join('movies', 'watched_movies.movie_id', '=', 'movies.id')
-        ->where('watched_movies.user_id', $userId)
+            ->join('movies', 'watched_movies.movie_id', '=', 'movies.id')
+            ->where('watched_movies.user_id', $userId)
             ->select('movies.genre', DB::raw('COUNT(movies.genre) as count'))
             ->groupBy('movies.genre')
             ->orderByDesc('count')
@@ -34,8 +72,8 @@ class MovieController extends Controller
 
         // Fetch genres from favorites
         $favoriteGenres = DB::table('favorites')
-        ->join('movies', 'favorites.movie_id', '=', 'movies.id')
-        ->where('favorites.user_id', $userId)
+            ->join('movies', 'favorites.movie_id', '=', 'movies.id')
+            ->where('favorites.user_id', $userId)
             ->select('movies.genre', DB::raw('COUNT(movies.genre) as count'))
             ->groupBy('movies.genre')
             ->orderByDesc('count')
