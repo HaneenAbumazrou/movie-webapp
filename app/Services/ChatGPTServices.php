@@ -23,7 +23,7 @@ class ChatGPTServices
                 'Content-Type' => 'application/json',
             ],
             'json' => [
-                'model' => 'gpt-4', // Or 'gpt-4' depending on your preference
+                'model' => 'gpt-4o', // Or 'gpt-4' depending on your preference
                 'messages' => [
                     ['role' => 'system', 'content' => 'You are a movie review assistant. Please only provide information and reviews related to films.'],
                     ['role' => 'user', 'content' => $message],

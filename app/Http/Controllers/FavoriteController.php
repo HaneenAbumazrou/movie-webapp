@@ -32,7 +32,6 @@ class FavoriteController extends Controller
                 'message' => 'Movie added to favorites successfully.',
                 'data' => $favorite
             ], 201);
-
         } catch (Exception $e) {
             return response()->json([
                 'message' => 'An error occurred while adding the movie to favorites.',
@@ -60,7 +59,6 @@ class FavoriteController extends Controller
             $favorite->delete();
 
             return response()->json(['message' => 'Movie removed from favorites successfully.'], 200);
-
         } catch (Exception $e) {
             return response()->json([
                 'message' => 'An error occurred while removing the movie from favorites.',
