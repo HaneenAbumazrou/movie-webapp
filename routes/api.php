@@ -42,6 +42,10 @@ Route::delete('contacts/{contact}', [ContactController::class, 'destroy']);
 Route::get('movies', [MovieController::class, 'index']);
 Route::post('movies', [MovieController::class, 'store']);
 Route::get('movie', [MovieController::class, 'show']);
+Route::get('movies/featured', [MovieController::class, 'featured']);
+Route::get('movies/trending', [MovieController::class, 'trending']);
+Route::get('movies/genre/{genre}', [MovieController::class, 'byGenre']);
+Route::get('movies/search/{query}', [MovieController::class, 'search']);
 Route::put('movies/{movie}', [MovieController::class, 'update']);
 Route::delete('movies/{movie}', [MovieController::class, 'destroy']);
 
